@@ -16,6 +16,7 @@ A personal finance tracker built to learn full stack development end to end. Log
 - SQLAlchemy
 - Pydantic
 - SQLite
+- Postgres
 - uv (package manager)
 **Tooling**
 - GitHub Actions (CI)
