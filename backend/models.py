@@ -1,12 +1,9 @@
 from database import Base
 from sqlalchemy import Column, Integer, DateTime, String, ForeignKey, func, Enum as SQLAlchemyEnum, Date, Boolean
 from enum import Enum
-from sqlalchemy.orm import relationship
-
-"""Create Enum for category and Subscription Frequency
-    """
 
 
+# Enums for category type and subscription frequency
 class CategoryType(str, Enum):
     EXPENSE = "expense"
     INCOME = "income"
@@ -55,7 +52,7 @@ class Expense(Base):
         "user.id", ondelete="CASCADE"), nullable=False, index=True)
     category_id = Column(Integer, ForeignKey(
         "category.id", ondelete="CASCADE"), nullable=False, index=True)
-    amount = Column(Integer, nullable=False)
+    amount_cents = Column(Integer, nullable=False)
     description = Column(String, nullable=True)
     date = Column(Date, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -69,7 +66,7 @@ class Income(Base):
         "user.id", ondelete="CASCADE"), nullable=False, index=True)
     category_id = Column(Integer, ForeignKey(
         "category.id", ondelete="CASCADE"), nullable=False, index=True)
-    amount = Column(Integer, nullable=False)
+    amount_cents = Column(Integer, nullable=False)
     source = Column(String, nullable=False)
     date = Column(Date, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -86,7 +83,7 @@ class Budget(Base):
         "category.id", ondelete="CASCADE"), nullable=False, index=True)
 
     month = Column(Date, nullable=False)
-    amount = Column(Integer, nullable=False)
+    amount_cents = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -104,13 +101,9 @@ class Subscription(Base):
     active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    """option 1: manually create the tables defined above in the databse would be :
-    uv run python -c "from database import engine, Base; from models import *; Base.metadata.create_all(engine); print('Tables created')"
-         option 2 : using alembic
 
-         - uv run alembic revision --autogenerate -m "initial schema"
-         
-         - check the migration file that was generated: uv run alembic upgrade head
-
-
-    """
+# option 1: manually create the tables defined above in the database:
+#   uv run python -c "from database import engine, Base; from models import *; Base.metadata.create_all(engine); print('Tables created')"
+# option 2: using alembic
+#   uv run alembic revision --autogenerate -m "initial schema"
+#   uv run alembic upgrade head
