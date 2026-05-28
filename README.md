@@ -15,9 +15,12 @@ A personal finance tracker built to learn full stack development end to end. Log
 - FastAPI
 - SQLAlchemy
 - Pydantic
-- SQLite
-- Postgres
+- Postgres (dev and prod)
+- Alembic (migrations)
 - uv (package manager)
+**Testing**
+- pytest
+- SQLite (in-memory, used only by the test suite for fast isolated runs)
 **Tooling**
 - GitHub Actions (CI)
 - Git
@@ -34,10 +37,30 @@ spendless/
 ├── backend/
 │   ├── pyproject.toml      # uv project config
 │   ├── uv.lock
-│   ├── main.py             # FastAPI app entry point
-│   ├── database.py         # SQLAlchemy DB connection
-│   ├── models.py           # ORM models (Expense)
-│   └── schemas.py          # Pydantic request/response schemas
+│   ├── main.py             # FastAPI app entry, mounts routers
+│   ├── database.py         # SQLAlchemy engine and session
+│   ├── models.py           # ORM models
+│   ├── schemas.py          # Pydantic request/response schemas
+│   ├── alembic/            # migration scripts
+│   ├── alembic.ini
+│   ├── crud/               # raw DB operations, one file per resource
+│   │   ├── user.py
+│   │   ├── category.py
+│   │   ├── expense.py
+│   │   ├── income.py
+│   │   ├── budget.py
+│   │   └── subscription.py
+│   ├── services/           # business logic, cross-table rules
+│   │   ├── expense_service.py
+│   │   ├── budget_service.py
+│   │   └── subscription_service.py
+│   └── routers/            # HTTP endpoints, one file per resource
+│       ├── users.py
+│       ├── categories.py
+│       ├── expenses.py
+│       ├── incomes.py
+│       ├── budgets.py
+│       └── subscriptions.py
 │
 └── frontend/
     ├── package.json
@@ -63,7 +86,7 @@ spendless/
 - Delete an expense
 - Filter expenses by category
 - See total spent for the current month
-- Persistent storage with SQLite
+- Persistent storage with Postgres
 
 ## Architecture
 
@@ -76,11 +99,11 @@ spendless/
                                                          │
                                                          ▼
                                               ┌──────────────────────┐
-                                              │   SQLite (finance.db)│
+                                              │   Postgres           │
                                               └──────────────────────┘
 ```
 
-**Layered backend pattern:** Route → Service → Repository → Database
+**Layered backend pattern:** Router (HTTP) → Service (business logic) → CRUD (DB ops) → Database
 
 ## API Endpoints
 
@@ -124,11 +147,13 @@ App will be available at `http://localhost:5173`.
 ## Build Phases
 
 1. **Backend Hello World**, FastAPI running, single route
-2. **Backend Database**, SQLite + SQLAlchemy, Expense model
-3. **Backend CRUD Routes**, POST / GET / DELETE + monthly summary
-4. **Frontend Static UI**, React shell with hardcoded data
-5. **Frontend Backend Wiring**, real fetch calls, state management
-6. **Polish**, category filter, loading states, error handling, CI
+2. **Backend Database**, Postgres + SQLAlchemy + Alembic, full model layer
+3. **Backend CRUD layer**, raw DB operations per resource
+4. **Backend Service layer**, business rules and cross-table logic
+5. **Backend Routers**, POST / GET / PATCH / DELETE per resource, monthly summary
+6. **Frontend Static UI**, React shell with hardcoded data
+7. **Frontend Backend Wiring**, real fetch calls, state management
+8. **Polish**, category filter, loading states, error handling, CI, pytest with SQLite in-memory
 
 ## Learning Goals
 
@@ -138,7 +163,7 @@ App will be available at `http://localhost:5173`.
 - React component composition, hooks, props
 - FastAPI routing, dependency injection, Pydantic validation
 - SQLAlchemy ORM, sessions, migrations
-- Layered backend architecture (route → service → repository)
+- Layered backend architecture (router → service → crud)
 - CORS, HTTP methods, JSON contracts
 - GitHub Actions CI for a monorepo
 
