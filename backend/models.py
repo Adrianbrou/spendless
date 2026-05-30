@@ -5,11 +5,13 @@ from enum import Enum
 
 # Enums for category type and subscription frequency
 class CategoryType(str, Enum):
+    """Whether a category tracks money going out or money coming in."""
     EXPENSE = "expense"
     INCOME = "income"
 
 
 class SubscriptionFrequency(str, Enum):
+    """How often a recurring subscription charges."""
     WEEKLY = "weekly"
     MONTHLY = "monthly"
     YEARLY = "yearly"
@@ -19,6 +21,7 @@ class SubscriptionFrequency(str, Enum):
 
 # User class
 class User(Base):
+    """A person who uses the app. Owns categories, expenses, incomes, budgets, subscriptions."""
 
     __tablename__ = "user"
 
@@ -31,6 +34,8 @@ class User(Base):
 
 # Category class
 class Category(Base):
+    """A label like "Groceries" or "Salary". Each user has their own set of categories."""
+
     __tablename__ = "category"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -45,6 +50,8 @@ class Category(Base):
 
 
 class Expense(Base):
+    """One spending event. Amount is stored in cents so we never deal with floating point money."""
+
     __tablename__ = "expense"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -59,6 +66,8 @@ class Expense(Base):
 
 
 class Income(Base):
+    """One earning event (paycheck, refund, gift). Amount stored in cents."""
+
     __tablename__ = "income"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -73,6 +82,7 @@ class Income(Base):
 
 
 class Budget(Base):
+    """A spending cap for one category in one month. Used to warn when the user is over budget."""
 
     __tablename__ = "budget"
 
@@ -88,6 +98,7 @@ class Budget(Base):
 
 
 class Subscription(Base):
+    """A recurring charge (Netflix, gym, etc). `active` flips to False when the user cancels it."""
 
     __tablename__ = "subscription"
     id = Column(Integer, primary_key=True, index=True)
