@@ -1,3 +1,4 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from api.user import router as user_router
 from api.budget import router as user_budget
@@ -8,11 +9,18 @@ from api.expense import router as user_expense
 import uvicorn
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
 def health_check():
-    return {"statut": "ok",
+    return {"statuts": "ok",
             "message": "Spendless API is running",
             "database": "connected",
             "version": "1.0.0"}
