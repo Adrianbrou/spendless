@@ -1,5 +1,6 @@
+
 from pydantic import BaseModel, PositiveInt, EmailStr
-from datetime import datetime, date
+from datetime import datetime, date as DateType
 from models import CategoryType, SubscriptionFrequency
 
 
@@ -65,7 +66,7 @@ class ExpenseCreate(BaseModel):
     amount_cents: PositiveInt
     category_id: int
     description: str | None = None
-    date: date
+    date: DateType
 
 
 class ExpenseUpdate(BaseModel):
@@ -73,7 +74,7 @@ class ExpenseUpdate(BaseModel):
     amount_cents: PositiveInt | None = None
     category_id: int | None = None
     description: str | None = None
-    date: date | None = None
+    date: DateType | None = None
 
 
 class ExpenseResponse(BaseModel):
@@ -83,7 +84,7 @@ class ExpenseResponse(BaseModel):
     category_id: int
     amount_cents: PositiveInt
     description: str | None = None
-    date: date
+    date: DateType
     created_at: datetime
     model_config = {"from_attributes": True}
 
@@ -94,7 +95,7 @@ class IncomeCreate(BaseModel):
     amount_cents: PositiveInt
     category_id: int
     source: str
-    date: date
+    date: DateType
 
 
 class IncomeUpdate(BaseModel):
@@ -102,7 +103,7 @@ class IncomeUpdate(BaseModel):
     amount_cents: PositiveInt | None = None
     category_id: int | None = None
     source: str | None = None
-    date: date | None = None
+    date: DateType | None = None
 
 
 class IncomeResponse(BaseModel):
@@ -112,7 +113,7 @@ class IncomeResponse(BaseModel):
     category_id: int
     amount_cents: PositiveInt
     source: str
-    date: date
+    date: DateType
     created_at: datetime
     model_config = {"from_attributes": True}
 
@@ -121,14 +122,14 @@ class IncomeResponse(BaseModel):
 class BudgetCreate(BaseModel):
     """Payload to set a spending cap for one category in one month."""
     category_id: int
-    month: date
+    month: DateType
     amount_cents: PositiveInt
 
 
 class BudgetUpdate(BaseModel):
     """Payload to change a budget. Every field optional."""
     category_id: int | None = None
-    month: date | None = None
+    month: DateType | None = None
     amount_cents: PositiveInt | None = None
 
 
@@ -137,7 +138,7 @@ class BudgetResponse(BaseModel):
     id: int
     user_id: int
     category_id: int
-    month: date
+    month: DateType
     amount_cents: PositiveInt
     created_at: datetime
     model_config = {"from_attributes": True}
@@ -149,7 +150,7 @@ class SubscriptionCreate(BaseModel):
     category_id: int
     name: str
     frequency: SubscriptionFrequency
-    start_date: date
+    start_date: DateType
     active: bool = True
 
 
@@ -158,7 +159,7 @@ class SubscriptionUpdate(BaseModel):
     category_id: int | None = None
     name: str | None = None
     frequency: SubscriptionFrequency | None = None
-    start_date: date | None = None
+    start_date: DateType | None = None
     active: bool | None = None
 
 
@@ -169,7 +170,7 @@ class SubscriptionResponse(BaseModel):
     category_id: int
     name: str
     frequency: SubscriptionFrequency
-    start_date: date
+    start_date: DateType
     active: bool
     created_at: datetime
     model_config = {"from_attributes": True}
