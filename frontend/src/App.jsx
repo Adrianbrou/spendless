@@ -1,26 +1,18 @@
-import ExpenseItem from "./components/ExpenseItem";
-import { useState, useEffect } from "react";
+import CreateUser from "./components/CreateUser";
+import ExpenseList from "./components/ExpenseList";
 
+// App is the page. Its only job now: lay out the page by placing the
+// feature components. Each feature handles its own data and logic inside itself.
 function App() {
-
-  const [expenses, setExpenses] = useState([])
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/expenses/?user_id=1")
-      .then((res) => res.json())
-      .then((data) => setExpenses(data))
-  }, []);
-
   return (
     <div>
       <h1>Spendless</h1>
-      <p>Hello from React</p>
 
-      <h2>Expenses</h2>
-      <ul>
-        {expenses.map((expense) => (
-          <ExpenseItem key={expense.id} expense={expense} />
-        ))}
-      </ul>
+      {/* The create-user form (owns its own state + POST) */}
+      <CreateUser />
+
+      {/* The expense list (owns its own fetch + state) */}
+      <ExpenseList />
     </div>
   );
 }
