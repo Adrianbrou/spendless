@@ -1,12 +1,14 @@
 import ExpenseItem from "./components/ExpenseItem";
+import { useState, useEffect } from "react";
 
 function App() {
 
-  let expenses = [
-    { id: 1001, description: "Netflix", amount_cents: 299 },
-    { id: 1002, description: "Coffee", amount_cents: 500 },
-    { id: 1003, description: "Gas", amount_cents: 4500 },
-  ];
+  const [expenses, setExpenses] = useState([])
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/expenses/?user_id=1")
+      .then((res) => res.json())
+      .then((data) => setExpenses(data))
+  }, []);
 
   return (
     <div>
